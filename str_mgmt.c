@@ -6,67 +6,72 @@
 /*   By: alromero <alromero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/13 18:22:43 by alromero          #+#    #+#             */
-/*   Updated: 2019/12/14 14:36:42 by alromero         ###   ########.fr       */
+/*   Updated: 2019/12/20 18:30:09 by alromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "printf.h"
 
-void	ft_putstr(const char *str)
+int		ft_putstr(const char *str)
 {
 	int i;
 
 	i = 0;
+	if (str == NULL)
+		return (0);
 	while (str[i] != '\0')
 	{
 		write(1, &str[i], 1);
 		i++;
 	}
+	return (i);
 }
 
-void	put_str_blank(t_printf *utils, const char *str)
-{
-	int		i;
-	char	*cad;
-	int		len;
-
-	i = 0;
-	cad = va_arg(utils->ap, char *);
-	while (cad[i] != '\0')
-	{
-		write(1, &cad[i], 1);
-		i++;
-	}
-	len = utils->len - ft_strlen(cad);
-	while (len-- > 0)
-		write(1, " ", 1);
-	ft_strlen(str);
-}
-
-void	put_str_zero(t_printf *utils, const char *str)
+int		ft_putstr_fixed(const char *str, int counter)
 {
 	int i;
-	int len;
 
 	i = 0;
-	len = utils->len - ft_strlen(va_arg((utils->ap), char *));
-	while (len-- > 0)
-		write(1, "0", 1);
-	while (str[i] != '\0')
+	if (str == NULL)
+		return (0);
+	while (str[i] != '\0' && counter != 0)
 	{
 		write(1, &str[i], 1);
 		i++;
+		counter--;
 	}
-	ft_strlen(str);
+	return (i);
 }
 
-void	str_mgmt(t_printf *utils, const char *c)
+int		str_blank_init(t_printf *utils, int len)
 {
-	if (utils->blank == 1)
-		put_str_blank(utils, c);
-	else if (utils->zero == 1)
-		put_str_zero(utils, c);
-	else
-		ft_putstr(va_arg(utils->ap, char *));		
+	int aux;
+
+	aux = utils->precision_len < len ? utils->precision_len : len;
+	aux = utils->precision == 0 ? len : aux;
+	return (utils->len - aux);
+}
+
+int		str_mgmt(t_printf *utils, const char *str)
+{
+	int			ret;
+	int			digits;
+	int			len;
+
+	ret = 0;
+	if (str == NULL)
+		str = "(null)";
+	digits = ft_strlen(str);
+	len = str_blank_init(utils, digits);
+	if (utils->precision && utils->precision_len < digits)
+		digits = utils->precision_len;
+	if (utils->blank == 0 && utils->width == 1)
+		ret += utils->len <= digits ? 0 : char_writter(len, ' ');
+	if (!(utils->precision && !utils->precision_len))
+		ret += utils->precision_len ? ft_putstr_fixed(str, utils->precision_len)
+		: ft_putstr(str);
+	if (utils->blank)
+		ret += char_writter(utils->len - digits, ' ');
+	return (ret);
 }

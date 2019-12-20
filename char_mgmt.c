@@ -6,55 +6,38 @@
 /*   By: alromero <alromero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 12:52:14 by alromero          #+#    #+#             */
-/*   Updated: 2019/12/14 14:32:55 by alromero         ###   ########.fr       */
+/*   Updated: 2019/12/20 18:42:37 by alromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "printf.h"
 
-void	char_mgmt(t_printf *utils)
+int		char_mgmt(t_printf *utils, int c)
 {
-	if (utils->blank == 1)
-		put_char_blank(utils);
-	else if (utils->zero == 1)
-		put_char_zero(utils);
-	else
-		ft_putchar_fd(va_arg(utils->ap, int), 1);
-}
+	int ret;
+	int digits;
+	int	len;
 
-void	put_char_blank(t_printf *utils)
-{
-	int		i;
-	char	cad;
-	int		len;
-
-	i = 0;
-	cad = va_arg(utils->ap, int);
-	ft_putchar_fd(cad, 1);
-	len = utils->len - 1;
-	while (len-- > 0)
-		write(1, " ", 1);
-}
-
-void	put_char_zero(t_printf *utils)
-{
-	int i;
-	int len;
-
-	i = 0;
-	len = utils->len - 1;
-	while (len-- > 0)
-		write(1, "0", 1);
-	ft_putchar_fd(va_arg(utils->ap, int), 1);
+	ret = 0;
+	digits = 1;
+	zero_dist(utils);
+	len = digits < utils->precision_len ?
+	blank_init(utils) : utils->len - digits;
+	if (utils->width == 1 && utils->blank == 0)
+		ret += utils->len <= digits ? 0 : char_writter(len, ' ');
+	if (utils->precision == 1 || utils->zero == 1)
+		ret += char_writter(zero_dist(utils) - 1, '0');
+	if (!(utils->precision && !utils->precision_len))
+		ret += write(1, &c, 1);
+	if (utils->blank)
+		ret += digits > utils->precision_len ?
+		char_writter(blank_end(utils, digits) - digits, ' ') :
+		char_writter(utils->len - utils->precision_len, ' ');
+	return (ret);
 }
 
 void	ft_putchar_fd(char c, int fd)
 {
 	write(fd, &c, 1);
-}
-
-void	ft_putchar(char c)
-{
-	write(1, &c, 1);
 }

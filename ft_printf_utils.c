@@ -6,7 +6,7 @@
 /*   By: alromero <alromero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/30 16:57:45 by alromero          #+#    #+#             */
-/*   Updated: 2019/12/13 14:16:53 by alromero         ###   ########.fr       */
+/*   Updated: 2019/12/20 18:57:11 by alromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,6 @@ int		ft_atoi(const char *str)
 	while (str[i] == ' ' || str[i] == '\r' || str[i] == '\t'
 			|| str[i] == '\n' || str[i] == '\v' || str[i] == '\f')
 		i++;
-	/*if (str[i] == '-')
-		sign *= -1;
-	if (str[i] == '-' || str[i] == '+')
-		i++;*/
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		if (result > __LONG_LONG_MAX__)
@@ -41,25 +37,11 @@ int		ft_atoi(const char *str)
 	return (result * sign);
 }
 
-
-char	*ft_strdup(const char *s1)
+int		ft_isdigit(int c)
 {
-	char	*d;
-	char	*p_s1;
-	size_t	i;
-
-	p_s1 = (char*)s1;
-	i = 0;
-	d = (char*)malloc(ft_strlen(p_s1) + 1);
-	if (d == NULL)
-		return (NULL);
-	while (p_s1[i] != '\0')
-	{
-		d[i] = p_s1[i];
-		i++;
-	}
-	d[i] = '\0';
-	return (d);
+	if (c >= '0' && c <= '9')
+		return (1);
+	return (0);
 }
 
 size_t	ft_strlen(const char *str)
