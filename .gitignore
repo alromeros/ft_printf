@@ -1,6 +1,3 @@
-pft/
-pft_2019/
-test-printf/
-DS_Store
-pft_2019/
-pft_2019/
+#ignora archivos .a y .o
+*.a
+*.o
