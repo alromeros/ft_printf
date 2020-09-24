@@ -1,7 +1,7 @@
 # ft_printf
 ## Descripción
 
-Consiste en recrear la función *printf* de la librería estándar de C.
+Consistente en recrear la función *printf* de la librería estándar de C.
 
 ## Documentación
 
